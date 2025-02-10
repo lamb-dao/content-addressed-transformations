@@ -88,14 +88,16 @@ given 2 the third can be checked.
 <= meaning, contains an address the content of
 
 <hash>.cat <= (hash (.catC .catA .catT))
+
 <hash>.catC <= (hash Content)
+
 <hash>.catA <= (hash (collect AncestorAddresses))
+
 <hash>.catT <= (hash Transformation)
 
 world.cat <= (hash ((hash nil) (hash nil) (hash nil)))
 
 initally the .cat will be generated <hash>.cat containing <hash>
-
 But the file itself may be renamed eg. my-special.cat because humans are human
 
 an address can be implemented as a hash of its contents which then serves as the
@@ -109,6 +111,11 @@ strong guarantees of data integrity.
 Being that downstream hashes are dependent on ancestor hashes there is some
 similarity to blockchain technologies, Derivative .cat nodes are dependent on
 the chain of nodes from the root world.cat node. However, in this case the root
-entry point from the world node available to any process at any time. This is a
-protocol not a product, its value is not in the monetization of a product, but
-the emergent memoization especially of large data artefacts.
+entry point from the world node available to any process at any time.
+
+protocols > products
+
+This is a protocol not a product, its value is not in the monetization of a
+product, but the emergent crowd sourced memoization especially of large data
+artefacts. Therefore implementations should be compatible with hashes calculated
+by IPFS.
