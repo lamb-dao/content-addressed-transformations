@@ -1,0 +1,114 @@
+* Motivation
+
+Naming files, some have found naming to be one of the hard problems in
+computing. Namespace pollution, and human error aside, accurate description of a
+thing is a deeper question than it may initially appear. In processing chains,
+the attempt is made to make files self describing, often appending the current
+process, provenance as type. This leads me to wonder about what passing Data really means. In
+RAM, between functions, we take this passing of data by reference for granted,
+but many computations are obligated to work out of memory.
+
+How can we apply data types to data itself? Can we gain the verifiability and
+composability of functional programming on files which reside on disk, which is
+outside of any controlling function and even between sessions of active computation?
+
+A Metadata object that contains properties of both Content and a distinct Type
+would allow confidence in the identity of a specific file. Type should capture
+the total generating process and all arguments which could also be Metadata
+objects. This is not the same as files of data having Metadata, in this case,
+the Metadata object contains the data. If the Metadata file is content
+addressed, repeated generation of an address, will indicate data be known to be
+identical in both its content and provenance. Files which are so referenced
+would serve as a form of out of memory memoization.
+
+The following describes such a protocol to guarantee the integrity of data and the
+provenance chain.
+
+* Content Addressed Transformations
+
+.cat addresses contain 3 addresses
+
+** .catC
+- pointing to content
+- ie. the data itself
+
+** .catA
+- pointing to .cat ancestors provided, and existing at the time of transformation, these
+are parsed from the .catT and checked they do exist.
+- ie. any arguments being found to be a valid .cat
+
+** .catT
+- pointing to the verbatim code of the function which creates the content
+- ie. the current transformation
+
+** world node
+A root ancestor .cat “world” whose .catC .catA and
+.catT all point to nil. Being the default .catA ancestor then the chain of
+data provenance would always terminate in the real world outside data
+representations, and the first transformation would be the initial
+representation of data, ie. observation, either by an instrument or a person.
+
+* properties
+
+** auditable output
+as each .cat contains a .catA pointing back to valid .cat objects that would
+render Data outputs with an explorable tree of past of process. Provenance as type.
+
+** scientific applications
+initial and final data .cat can be provided, along with claimed intermediate processing.
+The deterministic nature of obtaining the identical final .cat guarantees the
+integrity of claimed compute.
+
+given a valid .cat and a comprehensive database, either as a sqlite file or IPFS
+network, the fine grained history of the final data can be observed.
+
+Reproducibility of data, in the context of reproducibility of compute provides strong guarantees
+of integrity and observability.
+
+** monitoring
+if a process is expected to produce a specific .cat and fails to do so, the
+computational environment has significantly changed. This would validate
+declarative, reproducible systems such as Guix, and safeguard non reproducible systems.
+
+** memoization
+In the context of content addressable storage, ie implementation via a hashtable
+or IPFS,
+
+if the address to a Data object returns two addresses to Content and
+Type , which have thier contents and also refer to eachother then verifiable and
+reproducible Data outputs is guaranteed.
+
+testing a valid .cat would allow memoizing the total data history.
+
+** not yet clarified
+given 2 the third can be checked.
+
+* implementation
+
+<= meaning, contains an address the content of
+
+<hash>.cat <= (hash (.catC .catA .catT))
+<hash>.catC <= (hash Content)
+<hash>.catA <= (hash (collect AncestorAddresses))
+<hash>.catT <= (hash Transformation)
+
+world.cat <= (hash ((hash nil) (hash nil) (hash nil)))
+
+initally the .cat will be generated <hash>.cat containing <hash>
+
+But the file itself may be renamed eg. my-special.cat because humans are human
+
+an address can be implemented as a hash of its contents which then serves as the
+key in a hashtable which points its values. If the hash function remains the
+same it may also be implemented in an sqlite database, which being a single file
+would allow export of a total chain of provenance for verefication or scientific
+archival. More compellingly, implementing in ipfs, where content addressing is
+defacto and so memoization of massive compute chains would be sharable, with
+strong guarantees of data integrity.
+
+Being that downstream hashes are dependent on ancestor hashes there is some
+similarity to blockchain technologies, Derivative .cat nodes are dependent on
+the chain of nodes from the root world.cat node. However, in this case the root
+entry point from the world node available to any process at any time. This is a
+protocol not a product, its value is not in the monetization of a product, but
+the emergent memoization especially of large data artefacts.
